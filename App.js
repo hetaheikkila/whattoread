@@ -1,41 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as SecureStore from 'expo-secure-store';
-import LoginScreen from './src/screens/LoginScreen'; // polku omaan LoginScreen.js
+import HomeScreen from './src/screens/HomeScreen';
+import FavoritesScreen from './src/screens/FavouriteScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import BookDetailScreen from './src/screens/BookDetailScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-// Näkymät
-function HomeScreen({ navigation }) {
+
+function MainTabs({ onLogout }) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Aloitussivu</Text>
-      <Button title="Suosikit" onPress={() => navigation.navigate('Favorites')} />
-      <Button title="Profiili" onPress={() => navigation.navigate('Profile')} />
-    </View>
+    <Tab.Navigator screenOptions={{ headerShown: true }}>
+      <Tab.Screen name="Aloitussivu" component={HomeScreen} />
+      <Tab.Screen name="Suosikit" component={FavoritesScreen} />
+      <Tab.Screen name="Profiili">
+        {props => <ProfileScreen {...props} onLogout={onLogout} />}
+      </Tab.Screen>
+    </Tab.Navigator>
   );
 }
 
-function FavoritesScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Suosikit</Text>
-    </View>
-  );
-}
-
-function ProfileScreen({ onLogout }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Profiili</Text>
-      <Button title="Kirjaudu ulos" onPress={onLogout} />
-    </View>
-  );
-}
-
-// Sovellus
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -48,7 +38,11 @@ export default function App() {
     })();
   }, []);
 
-  const handleLogin = () => setLoggedIn(true);
+  const handleLogin = async () => {
+    await SecureStore.setItemAsync('loggedInUser', 'dummyUser');
+    setLoggedIn(true);
+  };
+
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync('loggedInUser');
     setLoggedIn(false);
@@ -56,23 +50,28 @@ export default function App() {
 
   if (loading) return null;
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: true }}>
-        {!loggedIn ? (
-          <Stack.Screen name="Login">
-            {() => <LoginScreen onLogin={handleLogin} />}
-          </Stack.Screen>
-        ) : (
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Favorites" component={FavoritesScreen} />
-            <Stack.Screen name="Profile">
-              {() => <ProfileScreen onLogout={handleLogout} />}
-            </Stack.Screen>
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    return (
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {!loggedIn ? (
+              <Stack.Screen name="Login" options={{ headerShown: false }}>
+                {props => <LoginScreen {...props} onLogin={handleLogin} />}
+              </Stack.Screen>
+            ) : (
+              <>
+                <Stack.Screen name="Main" options={{ headerShown: false }}>
+                  {props => <MainTabs {...props} onLogout={handleLogout} />}
+                </Stack.Screen>
+                <Stack.Screen
+                  name="BookDetail"
+                  component={BookDetailScreen}
+                  options={{ title: 'Kirjan tiedot' }}
+                />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    );
 }

@@ -11,10 +11,7 @@ import {
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
-const demoUser = {
-  username: 'maija',
-  password: '123',
-};
+const demoUser = { username: 'maija', password: '123' };
 
 export default function LoginScreen({ onLogin }) {
   const [username, setUsername] = useState('');
@@ -43,7 +40,6 @@ export default function LoginScreen({ onLogin }) {
           onChangeText={setUsername}
           style={styles.input}
           autoCapitalize="none"
-          autoCorrect={false}
         />
 
         <TextInput
@@ -63,47 +59,10 @@ export default function LoginScreen({ onLogin }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
-  },
-  box: {
-    width: '100%',
-    backgroundColor: '#fff',
-    padding: 30,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
-    backgroundColor: '#fafafa',
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-  },
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#f5f5f5' },
+  box: { width: '100%', backgroundColor: '#fff', padding: 30, borderRadius: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.1, shadowRadius: 5, elevation: 5 },
+  title: { fontSize: 24, fontWeight: '600', marginBottom: 20, textAlign: 'center' },
+  input: { borderWidth: 1, borderColor: '#ddd', padding: 12, borderRadius: 8, marginBottom: 15, backgroundColor: '#fafafa' },
+  button: { backgroundColor: '#007AFF', paddingVertical: 14, borderRadius: 8, alignItems: 'center' },
+  buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
 });
