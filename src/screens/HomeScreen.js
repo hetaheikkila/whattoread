@@ -23,11 +23,11 @@ export default function HomeScreen() {
     setResult(null);
 
     try {
-      if (searchType === 'book') {
+      if (searchType === 'book') { //hakee kirjan nimellä
         const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`);
         const data = await res.json();
         setResult(data.docs.slice(0, 10));
-      } else { //hae kirjailijan nimellä
+      } else { //hakee kirjailijan nimellä
         const res = await fetch(`https://openlibrary.org/search/authors.json?q=${encodeURIComponent(query)}`);
         const data = await res.json();
         setResult({ authors: data.docs.slice(0, 10), works: null });
@@ -38,7 +38,7 @@ export default function HomeScreen() {
       setLoading(false);
     }
   };
-
+  //hakee kirjailijan kaikki teokset
   const fetchAuthorWorks = async (authorKey) => {
     setLoading(true);
     try {
@@ -54,7 +54,7 @@ export default function HomeScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>OpenLibrary-haku</Text>
+      <Text style={styles.heading}>Avaa kirjojen maailma</Text>
 
       {/* Hakutyyppi */}
       <View style={styles.toggleContainer}>
