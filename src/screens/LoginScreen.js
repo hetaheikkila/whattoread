@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, Alert } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import bcrypt from 'bcryptjs';
 
 const demoUser = {
   username: 'maija',
-  passwordHash: bcrypt.hashSync('Salasana123!', 10),
+  password: '123',
 };
 
 export default function LoginScreen({ onLogin }) {
@@ -13,30 +21,89 @@ export default function LoginScreen({ onLogin }) {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    if (username === demoUser.username && bcrypt.compareSync(password, demoUser.passwordHash)) {
+    if (username === demoUser.username && password === demoUser.password) {
       await SecureStore.setItemAsync('loggedInUser', JSON.stringify({ username }));
-      onLogin(); //kertoo että kirjautuminen onnistui
+      onLogin();
     } else {
-      Alert.alert('Virheellinen käyttäjätunnus tai salasana');
+      Alert.alert('Virhe', 'Virheellinen käyttäjätunnus tai salasana');
     }
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <TextInput
-        placeholder="Käyttäjätunnus"
-        value={username}
-        onChangeText={setUsername}
-        style={{ borderWidth: 1, padding: 8, marginBottom: 10 }}
-      />
-      <TextInput
-        placeholder="Salasana"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-        style={{ borderWidth: 1, padding: 8, marginBottom: 10 }}
-      />
-      <Button title="Kirjaudu" onPress={handleLogin} />
-    </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <View style={styles.box}>
+        <Text style={styles.title}>Kirjaudu sisään</Text>
+
+        <TextInput
+          placeholder="Käyttäjätunnus"
+          value={username}
+          onChangeText={setUsername}
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+
+        <TextInput
+          placeholder="Salasana"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Kirjaudu</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    padding: 20,
+  },
+  box: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: 30,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 15,
+    backgroundColor: '#fafafa',
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+});
