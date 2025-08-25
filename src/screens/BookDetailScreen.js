@@ -1,36 +1,84 @@
-import React from 'react';
-import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, Button, TextInput, ScrollView, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function BookDetailScreen({ route }) {
-  const { book } = route.params;
+  const { book } = route.params; // Kirjan data
+  const [rating, setRating] = useState('');
+  const [review, setReview] = useState('');
+
+  const addFavorite = async () => {
+    const storedFavorites = await AsyncStorage.getItem('favorites');
+    const favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
+
+    if (!favorites.some(item => item.id === book.id)) {
+      favorites.push({
+        ...book,
+        userRating: rating ? parseInt(rating) : null,
+        userReview: review || null
+      });
+      await AsyncStorage.setItem('favorites', JSON.stringify(favorites));
+      alert('Kirja lisätty suosikkeihin!');
+    } else {
+      alert('Kirja on jo suosikeissa.');
+    }
+  };
+
+  const removeFavorite = async () => {
+    const storedFavorites = await AsyncStorage.getItem('favorites');
+    const favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
+    const newFavorites = favorites.filter(item => item.id !== book.id);
+    await AsyncStorage.setItem('favorites', JSON.stringify(newFavorites));
+    alert('Kirja poistettu suosikeista.');
+  };
+
   const volume = book.volumeInfo;
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {volume.imageLinks?.thumbnail && (
-        <Image
-          source={{ uri: volume.imageLinks.thumbnail }}
-          style={styles.cover}
-        />
+        <Image source={{ uri: volume.imageLinks.thumbnail }} style={styles.thumbnail} />
       )}
       <Text style={styles.title}>{volume.title}</Text>
-      {volume.authors && (
-        <Text style={styles.text}>👤 Kirjailija: {volume.authors.join(', ')}</Text>
-      )}
-      {volume.categories && (
-        <Text style={styles.text}>📚 Genre: {volume.categories.join(', ')}</Text>
-      )}
-      {volume.description && (
-        <Text style={styles.description}>{volume.description}</Text>
-      )}
+      {volume.authors && <Text style={styles.authors}>Kirjailija: {volume.authors.join(', ')}</Text>}
+      {volume.categories && <Text style={styles.categories}>Genre: {volume.categories.join(', ')}</Text>}
+      {volume.description && <Text style={styles.description}>{volume.description}</Text>}
+
+      <Text style={styles.label}>Anna tähdet (1-5):</Text>
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        value={rating}
+        onChangeText={setRating}
+        placeholder="esim. 4"
+        maxLength={1}
+      />
+
+      <Text style={styles.label}>Kirjoita arvostelu:</Text>
+      <TextInput
+        style={[styles.input, { height: 80 }]}
+        multiline
+        value={review}
+        onChangeText={setReview}
+        placeholder="Kirjoita arvostelu..."
+      />
+
+      <View style={styles.buttons}>
+        <Button title="Lisää suosikkeihin" onPress={addFavorite} />
+        <Button title="Poista suosikeista" onPress={removeFavorite} />
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 15 },
-  cover: { width: 150, height: 220, alignSelf: 'center', marginBottom: 20 },
+  container: { padding: 20 },
+  thumbnail: { width: 120, height: 180, marginBottom: 20, alignSelf: 'center' },
   title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
-  text: { fontSize: 16, marginVertical: 5 },
-  description: { marginTop: 15, fontSize: 14, lineHeight: 20 },
+  authors: { fontSize: 16, marginBottom: 5, textAlign: 'center' },
+  categories: { fontSize: 16, marginBottom: 10, textAlign: 'center' },
+  description: { fontSize: 14, color: '#333', marginBottom: 20 },
+  label: { fontSize: 14, marginTop: 10 },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 8, marginTop: 5, borderRadius: 5 },
+  buttons: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 20 },
 });
