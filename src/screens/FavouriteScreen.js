@@ -3,6 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, Animated } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
+import StarRating from '../components/StarRating';
 
 export default function FavoritesScreen() {
   const [favorites, setFavorites] = useState([]);
@@ -62,7 +63,7 @@ export default function FavoritesScreen() {
     return (
       <Swipeable
         renderRightActions={(progress, dragX) => renderRightActions(progress, dragX, item)}
-        onSwipeableOpen={() => handleDeleteFavorite(item)} // poistaa kun swipattu kokonaan
+        onSwipeableOpen={() => handleDeleteFavorite(item)}
       >
         <View style={styles.bookItem}>
           {volume.imageLinks?.thumbnail && (
@@ -73,8 +74,7 @@ export default function FavoritesScreen() {
             {volume.authors && <Text style={styles.authors}>Kirjailija: {volume.authors.join(', ')}</Text>}
             {volume.categories && <Text style={styles.categories}>Genre: {volume.categories.join(', ')}</Text>}
             {volume.description && <Text style={styles.description}>{volume.description}</Text>}
-
-            {item.userRating != null && <Text style={styles.rating}>⭐ {item.userRating}/5</Text>}
+            {item.userRating != null && (<StarRating rating={item.userRating} />)}
             {item.userReview && <Text style={styles.review}>📝 {item.userReview}</Text>}
           </View>
         </View>
