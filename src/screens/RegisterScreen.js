@@ -2,35 +2,33 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
-export default function LoginScreen({ navigation, onLogin }) {
+export default function RegisterScreen({ navigation, onRegister }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLoginPress = async () => {
+  const handleRegister = async () => {
+    if (!username || !password) {
+      Alert.alert("Virhe", "Täytä kaikki kentät");
+      return;
+    }
+
     try {
-      const savedUser = await SecureStore.getItemAsync('registeredUser');
-      if (!savedUser) {
-        Alert.alert("Virhe", "Käyttäjää ei löydy, rekisteröidy ensin!");
-        return;
-      }
+      await SecureStore.setItemAsync(
+        'registeredUser',
+        JSON.stringify({ username, password })
+      );
 
-      const { username: savedUsername, password: savedPassword } = JSON.parse(savedUser);
-
-      if (username === savedUsername && password === savedPassword) {
-        await SecureStore.setItemAsync('loggedInUser', username);
-        onLogin();
-      } else {
-        Alert.alert("Virhe", "Väärä käyttäjätunnus tai salasana");
-      }
+      Alert.alert("Onnistui", "Käyttäjä rekisteröity!");
+      onRegister();
     } catch (error) {
-      console.error("Virhe kirjautumisessa:", error);
-      Alert.alert("Virhe", "Kirjautuminen epäonnistui");
+      console.error("Virhe rekisteröinnissä:", error);
+      Alert.alert("Virhe", "Rekisteröinti epäonnistui");
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Kirjaudu sisään</Text>
+      <Text style={styles.title}>Luo käyttäjä</Text>
 
       <TextInput
         style={styles.input}
@@ -48,12 +46,12 @@ export default function LoginScreen({ navigation, onLogin }) {
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-        <Text style={styles.buttonText}>Kirjaudu</Text>
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
+        <Text style={styles.buttonText}>Rekisteröidy</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.link}>Eikö sinulla ole vielä tiliä? Rekisteröidy</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.link}>Onko sinulla jo tili? Kirjaudu sisään</Text>
       </TouchableOpacity>
     </View>
   );
