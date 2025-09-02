@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as SecureStore from 'expo-secure-store';
 import HomeScreen from './src/screens/HomeScreen';
 import FavoritesScreen from './src/screens/FavouriteScreen';
@@ -13,11 +14,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 function MainTabs({ onLogout }) {
   return (
     <Tab.Navigator screenOptions={{ headerShown: true }}>
-      <Tab.Screen name="Aloitussivu" component={HomeScreen} />
+      <Tab.Screen name="Etsi" component={HomeScreen} />
       <Tab.Screen name="Suosikit" component={FavoritesScreen} />
       <Tab.Screen name="Profiili">
         {props => <ProfileScreen {...props} onLogout={onLogout} />}
@@ -50,7 +50,8 @@ export default function App() {
 
   if (loading) return null;
 
-    return (
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <NavigationContainer>
           <Stack.Navigator>
@@ -73,5 +74,6 @@ export default function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
-    );
+    </GestureHandlerRootView>
+  );
 }
