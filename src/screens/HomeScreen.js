@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import { G_API_KEY } from '@env';
 
 const API_KEY = G_API_KEY;

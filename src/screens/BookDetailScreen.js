@@ -3,7 +3,7 @@ import { View, Text, Image, Button, TextInput, ScrollView, StyleSheet } from 're
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function BookDetailScreen({ route }) {
-  const { book } = route.params; // Kirjan data
+  const { book } = route.params;
   const [rating, setRating] = useState('');
   const [review, setReview] = useState('');
 
@@ -22,14 +22,6 @@ export default function BookDetailScreen({ route }) {
     } else {
       alert('Kirja on jo suosikeissa.');
     }
-  };
-
-  const removeFavorite = async () => {
-    const storedFavorites = await AsyncStorage.getItem('favorites');
-    const favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
-    const newFavorites = favorites.filter(item => item.id !== book.id);
-    await AsyncStorage.setItem('favorites', JSON.stringify(newFavorites));
-    alert('Kirja poistettu suosikeista.');
   };
 
   const volume = book.volumeInfo;
@@ -65,7 +57,6 @@ export default function BookDetailScreen({ route }) {
 
       <View style={styles.buttons}>
         <Button title="Lisää suosikkeihin" onPress={addFavorite} />
-        <Button title="Poista suosikeista" onPress={removeFavorite} />
       </View>
     </ScrollView>
   );
