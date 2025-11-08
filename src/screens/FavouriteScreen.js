@@ -85,7 +85,7 @@ export default function FavoritesScreen() {
   return (
     <View style={styles.container}>
       {favorites.length === 0 ? (
-        <Text>Ei vielä suosikkeja 📚</Text>
+        <Text>Ei vielä suosikkeja</Text>
       ) : (
         <FlatList
           data={favorites}
