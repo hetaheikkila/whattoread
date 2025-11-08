@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from 'react-native';
 
-const defaultEmojis = ['😎','😊','🤓','🥳','👻','🐶','🐱','🦄','🧙‍♂️','👩‍💻'];
+//Annetaan käyttäjälle vaihtoehtoja profiilikuvaan emojeilla.
+const defaultEmojis = ['👻','🐶','🐱','🦄','🧙‍♂️','👩‍💻'];
 
 export default function EmojiAvatarPicker({ avatar, onSelect }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -11,14 +12,13 @@ export default function EmojiAvatarPicker({ avatar, onSelect }) {
     setModalVisible(false);
   };
 
+  //Tässä avatar -> valitaan modaalin avulla käyttäjälle.
   return (
     <View style={styles.container}>
-      {/* Nykyinen avatar */}
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <Text style={styles.avatar}>{avatar || defaultEmojis[0]}</Text>
       </TouchableOpacity>
 
-      {/* Modal ikoneille */}
       <Modal visible={modalVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.overlay}>

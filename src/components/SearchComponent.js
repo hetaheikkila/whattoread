@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  TextInput,
-  Button,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import {View, TextInput, Button, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
 
 export default function SearchComponent({ onBookSelect }) {
   const [query, setQuery] = useState('');
@@ -19,13 +10,13 @@ export default function SearchComponent({ onBookSelect }) {
     if (!query) return;
     setLoading(true);
     setResult(null);
-
+//Haetaan fetchin avulla apista kirjoja/kirjailijoita ja heidän teoksia.
     try {
       const res = await fetch(`https://openlibrary.org/search.json?title=${encodeURIComponent(query)}`);
       const data = await res.json();
       setResult(data.docs.slice(0, 10));
     } catch (error) {
-      console.error('Hakivirhe:', error);
+      console.error('Hakuvirhe:', error);
     } finally {
       setLoading(false);
     }

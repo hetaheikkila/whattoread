@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
+//tähti tai tyhjä.
 export default function StarRating({ rating, maxStars = 5 }) {
   const renderStars = () => {
     let stars = '';
     for (let i = 1; i <= maxStars; i++) {
-      stars += i <= rating ? '⭐' : '☆';
+      stars += i <= rating ? '⭐' : ' ';
     }
     return stars;
   };

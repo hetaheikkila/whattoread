@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 
+//Funktiolla voidaan poistaa suosikki teos swaippaamalla suosikkilistalta.
 export default function DeleteFavourite({ book, onDelete }) {
   const handleDelete = () => {
     Alert.alert(
