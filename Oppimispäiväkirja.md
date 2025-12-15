@@ -1,0 +1,10 @@
+# Oppimispäiväkirja - Heta Heikkilä
+Tässä projektissa kohtasin muutaman ongelman, jotka sain kuitenkin ratkaistua ja projektin toimivaksi määräajassa. Tässä oppimispäiväkirjassa erittelen ongelmat ja niiden ratkaisut.
+## Api
+Ensimmäiseksi ongelmakseni muodostui projektissa käyttämäni apin hyödyntäminen. Suunnittelin käyttäväni Google Books APIs, mutten saanut sitä toimimaan. En osannut käyttää apin sisältämää "bookshelf" toimintoa. Google Books toimii REST rajapinnalla ja minulla ei yksinkertaisesti ollut motivaatiota palauttaa muistiin kuinka sellainen toimii. Ratkaisuna tähän oli apin vaihto open library apiin. Tämä api tarjosi tarvitsemani toiminnot ilman ylimääräistä. 
+## Front-end
+Toinen ongelmani oli sovelluksen ulkoasu. Olen erittäin huono suunnittelemaan ja toteuttamaan sovelluksen ulkoasua, joten sovelluksestani tuli hyvin yksinkertainen. Minulla ei ollut motivaatiota harjoitella ulkoasun tyylittelyä, joten ratkaisuna tähän jätin ulkoasun lähes kokonaan tyylittelemättä ja käytin aikaisemmista projekteistani tyylittelyä komponenttinieni kanssa.
+## Motivaatio
+Kuten jo aiemmin olen tässä oppimispäiväkirjassa maininnut, motivaationi tehdä tätä projektia oli erittäin alhainen. Suurimmaksi vastoinkäymiseksi projektissani ei tullut tekniset ongelmat, vaan halu tehdä projektia ollenkaan. Minulla on ollut koulumotivaation kanssa ongelmia henkilökohtaisista syistä ja en ole jaksanut panostaa koulutehtäviini, vaikka olisin halunnut. Ratkaisuna tähän oli tehdä helppo sovellus ja jättää siitä vaikeammat toiminnot, ulkoinen tietokanta ja lähes kaikki tyylittely pois. En ole tyytyväinen tähän ratkaisuun, mutta se oli paras mihin tällä hetkellä pystyn.
+### Mitä tekisin toisin?
+Jos toteuttaisin projektin nyt uudestaan panostaisin enemmän hyvään suunnitteluun, aikataulutukseen ja käyttöliittymän parantamiseen. Lisäisin ulkoisen tietokannan ja parantaisin sisäänkirjautumista. Tekisin sovelluksen ulkoasusta kiinnostavamman ja käyttäjäystävällisemmän. Koittaisin myös nostaa motivaatiotani tehdä koulutehtäviä, jotta saisin kaiken edellämainitun varmasti tehtyä.
